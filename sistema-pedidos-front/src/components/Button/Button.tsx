@@ -11,8 +11,7 @@ export default Button;
 
  
 export const Link = styled.a`
-    background-color: ${({theme}) => theme.colors.button};
+    background-color: ${({theme}) => theme.colors.secondary};
     font-size: 14px;
     border-radius: 6px;
-    text-transform: uppercase;
 `;
