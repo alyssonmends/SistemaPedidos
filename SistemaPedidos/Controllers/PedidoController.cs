@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SistemaPedidos.Data;
 using SistemaPedidos.Models;
+using SistemaPedidos.Repositorios.Interfaces;
 
 namespace SistemaPedidos.Controllers
 {
@@ -14,95 +10,54 @@ namespace SistemaPedidos.Controllers
     [ApiController]
     public class PedidoController : ControllerBase
     {
-        private readonly SistemaPedidosContext _context;
+        private readonly IPedidoRepositorio _pedidoRepositorio;
 
-        public PedidoController(SistemaPedidosContext context)
+        public PedidoController(IPedidoRepositorio pedidoRepositorio)
         {
-            _context = context;
+            _pedidoRepositorio = pedidoRepositorio;
         }
 
-        // GET: api/Pedido
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PedidoModel>>> GetPedidos()
+        public async Task<ActionResult<List<PedidoModel>>> BuscarPedidos()
         {
-            return await _context.Pedidos.ToListAsync();
+            List<PedidoModel> pedidos = await _pedidoRepositorio.BuscarPedidos();
+            return Ok(pedidos);
         }
 
-        // GET: api/Pedido/5
+        [HttpGet("fornecedor/{id}")]
+        public async Task<ActionResult<List<PedidoModel>>> BuscarPedidosPorFornecedor(int id)
+        {
+            List<PedidoModel> pedidosPorFornecedor = await _pedidoRepositorio.BuscarPedidosPorFornecedor(id);
+            return Ok(pedidosPorFornecedor);
+        }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<PedidoModel>> GetPedidoModel(int id)
+        public async Task<ActionResult<PedidoModel>> BuscarPorId(int id)
         {
-            var pedidoModel = await _context.Pedidos.FindAsync(id);
-
-            if (pedidoModel == null)
-            {
-                return NotFound();
-            }
-
-            return pedidoModel;
+            PedidoModel pedido = await _pedidoRepositorio.BuscarPorId(id);
+            return Ok(pedido);
         }
 
-        // PUT: api/Pedido/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPedidoModel(int id, PedidoModel pedidoModel)
-        {
-            if (id != pedidoModel.Codigo)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(pedidoModel).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PedidoModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Pedido
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<PedidoModel>> PostPedidoModel(PedidoModel pedidoModel)
+        public async Task<ActionResult<PedidoModel>> AdicionarPedido([FromBody] PedidoModel pedidoModel)
         {
-            _context.Pedidos.Add(pedidoModel);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPedidoModel", new { id = pedidoModel.Codigo }, pedidoModel);
+            PedidoModel pedido = await _pedidoRepositorio.AdicionarPedido(pedidoModel);
+            return Ok(pedido);
         }
 
-        // DELETE: api/Pedido/5
+        [HttpPut("{id}")]
+        public async Task<ActionResult<PedidoModel>> AtualizarPedido([FromBody] PedidoModel pedidoModel, int id)
+        {
+            pedidoModel.Codigo = id;
+            PedidoModel pedido = await _pedidoRepositorio.AtualizarPedido(pedidoModel, id);
+            return Ok(pedido);
+        }
+
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePedidoModel(int id)
+        public async Task<ActionResult<PedidoModel>> DeletarPedido(int id)
         {
-            var pedidoModel = await _context.Pedidos.FindAsync(id);
-            if (pedidoModel == null)
-            {
-                return NotFound();
-            }
-
-            _context.Pedidos.Remove(pedidoModel);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool PedidoModelExists(int id)
-        {
-            return _context.Pedidos.Any(e => e.Codigo == id);
+            bool deletado = await _pedidoRepositorio.DeletarPedido(id);
+            return Ok(deletado);
         }
     }
 }

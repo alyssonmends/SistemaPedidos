@@ -1,7 +1,5 @@
 ﻿using SistemaPedidos.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SistemaPedidos.Repositorios.Interfaces
@@ -16,6 +14,6 @@ namespace SistemaPedidos.Repositorios.Interfaces
 
         Task<FornecedorModel> AtualizarFornecedor(FornecedorModel fornecedor, int id);
 
-        Task<bool> ApagarFornecedor(int id);
+        Task<bool> DeletarFornecedor(int id);
     }
 }

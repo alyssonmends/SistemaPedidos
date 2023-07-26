@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SistemaPedidos.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SistemaPedidos.Data.Map
 {
@@ -16,6 +12,9 @@ namespace SistemaPedidos.Data.Map
             builder.Property(x => x.Descricao).IsRequired();
             builder.Property(x => x.DataCadastro);
             builder.Property(x => x.Valor).IsRequired();
+            builder.Property(x => x.FornecedorId).IsRequired();
+
+            builder.HasOne(x => x.Fornecedor);
         }
     }
 }

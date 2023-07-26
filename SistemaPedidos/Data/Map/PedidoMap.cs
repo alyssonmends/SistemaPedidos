@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SistemaPedidos.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SistemaPedidos.Data.Map
 {
@@ -16,6 +12,9 @@ namespace SistemaPedidos.Data.Map
             builder.Property(x => x.DataPedido).IsRequired();
             builder.Property(x => x.QuantidadeProdutos);
             builder.Property(x => x.ValorTotal).IsRequired();
+            builder.Property(x => x.ProdutoId).IsRequired();
+
+            builder.HasOne(x => x.Produto);
         }
     }
 }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SistemaPedidos.Data;
 using SistemaPedidos.Models;
+using SistemaPedidos.Repositorios.Interfaces;
 
 namespace SistemaPedidos.Controllers
 {
@@ -14,95 +10,47 @@ namespace SistemaPedidos.Controllers
     [ApiController]
     public class FornecedorController : ControllerBase
     {
-        private readonly SistemaPedidosContext _context;
+        private readonly IFornecedorRepositorio _fornecedorRepositorio;
 
-        public FornecedorController(SistemaPedidosContext context)
+        public FornecedorController(IFornecedorRepositorio fornecedorRepositorio)
         {
-            _context = context;
+            _fornecedorRepositorio = fornecedorRepositorio;
         }
 
-        // GET: api/Fornecedor
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FornecedorModel>>> GetFornecedores()
+        public async Task<ActionResult<List<FornecedorModel>>> BuscarFornecedores()
         {
-            return await _context.Fornecedores.ToListAsync();
+            List<FornecedorModel> fornecedores = await _fornecedorRepositorio.BuscarFornecedores();
+            return Ok(fornecedores);
         }
 
-        // GET: api/Fornecedor/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<FornecedorModel>> GetFornecedorModel(int id)
+        public async Task<ActionResult<FornecedorModel>> BuscarPorId(int id)
         {
-            var fornecedorModel = await _context.Fornecedores.FindAsync(id);
-
-            if (fornecedorModel == null)
-            {
-                return NotFound();
-            }
-
-            return fornecedorModel;
+            FornecedorModel fornecedor = await _fornecedorRepositorio.BuscarPorId(id);
+            return Ok(fornecedor);
         }
 
-        // PUT: api/Fornecedor/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFornecedorModel(int id, FornecedorModel fornecedorModel)
-        {
-            if (id != fornecedorModel.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(fornecedorModel).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FornecedorModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Fornecedor
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<FornecedorModel>> PostFornecedorModel(FornecedorModel fornecedorModel)
+        public async Task<ActionResult<FornecedorModel>> AdicionarFornecedor([FromBody] FornecedorModel fornecedorModel)
         {
-            _context.Fornecedores.Add(fornecedorModel);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetFornecedorModel", new { id = fornecedorModel.Id }, fornecedorModel);
+            FornecedorModel fornecedor = await _fornecedorRepositorio.AdicionarFornecedor(fornecedorModel);
+            return Ok(fornecedor);
         }
 
-        // DELETE: api/Fornecedor/5
+        [HttpPut("{id}")]
+        public async Task<ActionResult<FornecedorModel>> AtualizarFornecedor([FromBody] FornecedorModel fornecedorModel, int id)
+        {
+            fornecedorModel.Id = id;
+            FornecedorModel fornecedor = await _fornecedorRepositorio.AtualizarFornecedor(fornecedorModel, id);
+            return Ok(fornecedor);
+        }
+
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFornecedorModel(int id)
+        public async Task<ActionResult<FornecedorModel>> DeletarFornecedor(int id)
         {
-            var fornecedorModel = await _context.Fornecedores.FindAsync(id);
-            if (fornecedorModel == null)
-            {
-                return NotFound();
-            }
-
-            _context.Fornecedores.Remove(fornecedorModel);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool FornecedorModelExists(int id)
-        {
-            return _context.Fornecedores.Any(e => e.Id == id);
+            bool deletado = await _fornecedorRepositorio.DeletarFornecedor(id);
+            return Ok(deletado);
         }
     }
 }

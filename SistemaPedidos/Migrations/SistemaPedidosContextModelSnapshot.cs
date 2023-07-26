@@ -62,10 +62,7 @@ namespace SistemaPedidos.Migrations
                     b.Property<DateTime>("DataPedido")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("FornecedorId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProdutoCodigo")
+                    b.Property<int>("ProdutoId")
                         .HasColumnType("int");
 
                     b.Property<int>("QuantidadeProdutos")
@@ -76,9 +73,7 @@ namespace SistemaPedidos.Migrations
 
                     b.HasKey("Codigo");
 
-                    b.HasIndex("FornecedorId");
-
-                    b.HasIndex("ProdutoCodigo");
+                    b.HasIndex("ProdutoId");
 
                     b.ToTable("Pedidos");
                 });
@@ -97,27 +92,39 @@ namespace SistemaPedidos.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("FornecedorId")
+                        .HasColumnType("int");
+
                     b.Property<float>("Valor")
                         .HasColumnType("real");
 
                     b.HasKey("Codigo");
+
+                    b.HasIndex("FornecedorId");
 
                     b.ToTable("Produtos");
                 });
 
             modelBuilder.Entity("SistemaPedidos.Models.PedidoModel", b =>
                 {
-                    b.HasOne("SistemaPedidos.Models.FornecedorModel", "Fornecedor")
-                        .WithMany()
-                        .HasForeignKey("FornecedorId");
-
                     b.HasOne("SistemaPedidos.Models.ProdutoModel", "Produto")
                         .WithMany()
-                        .HasForeignKey("ProdutoCodigo");
-
-                    b.Navigation("Fornecedor");
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Produto");
+                });
+
+            modelBuilder.Entity("SistemaPedidos.Models.ProdutoModel", b =>
+                {
+                    b.HasOne("SistemaPedidos.Models.FornecedorModel", "Fornecedor")
+                        .WithMany()
+                        .HasForeignKey("FornecedorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Fornecedor");
                 });
 #pragma warning restore 612, 618
         }

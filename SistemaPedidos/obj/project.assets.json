@@ -7337,11 +7337,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alyss\\Desktop\\Nova pasta\\SistemaPedidos\\SistemaPedidos.csproj",
+      "projectUniqueName": "C:\\Users\\alyss\\Desktop\\Projetos Git\\SistemaPedidos\\SistemaPedidos\\SistemaPedidos.csproj",
       "projectName": "SistemaPedidos",
-      "projectPath": "C:\\Users\\alyss\\Desktop\\Nova pasta\\SistemaPedidos\\SistemaPedidos.csproj",
+      "projectPath": "C:\\Users\\alyss\\Desktop\\Projetos Git\\SistemaPedidos\\SistemaPedidos\\SistemaPedidos.csproj",
       "packagesPath": "C:\\Users\\alyss\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alyss\\Desktop\\Nova pasta\\SistemaPedidos\\obj\\",
+      "outputPath": "C:\\Users\\alyss\\Desktop\\Projetos Git\\SistemaPedidos\\SistemaPedidos\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\alyss\\AppData\\Roaming\\NuGet\\NuGet.Config",

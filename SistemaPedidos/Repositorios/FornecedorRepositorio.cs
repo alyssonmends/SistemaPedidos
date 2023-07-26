@@ -4,7 +4,6 @@ using SistemaPedidos.Models;
 using SistemaPedidos.Repositorios.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SistemaPedidos.Repositorios
@@ -18,27 +17,22 @@ namespace SistemaPedidos.Repositorios
             _dbContext = sistemaPedidosContext;
         }
 
+        public async Task<List<FornecedorModel>> BuscarFornecedores()
+        {
+            return await _dbContext.Fornecedores.ToListAsync();
+        }
+
+        public async Task<FornecedorModel> BuscarPorId(int id)
+        {
+            return await _dbContext.Fornecedores.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<FornecedorModel> AdicionarFornecedor(FornecedorModel fornecedor)
         {
             await _dbContext.Fornecedores.AddAsync(fornecedor);
             await _dbContext.SaveChangesAsync();
 
             return fornecedor;
-        }
-
-        public async Task<bool> ApagarFornecedor(int id)
-        {
-            FornecedorModel fornecedorPorId = await BuscarPorId(id);
-
-            if (fornecedorPorId == null)
-            {
-                throw new Exception("Fornecedor" + id + "não foi encontrado.");
-            }
-
-            _dbContext.Fornecedores.Remove(fornecedorPorId);
-            await _dbContext.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<FornecedorModel> AtualizarFornecedor(FornecedorModel fornecedor, int id)
@@ -62,14 +56,19 @@ namespace SistemaPedidos.Repositorios
             return fornecedorPorId;
         }
 
-        public async Task<List<FornecedorModel>> BuscarFornecedores()
+        public async Task<bool> DeletarFornecedor(int id)
         {
-            return await _dbContext.Fornecedores.ToListAsync();
-        }
+            FornecedorModel fornecedorPorId = await BuscarPorId(id);
 
-        public async Task<FornecedorModel> BuscarPorId(int id)
-        {
-            return await _dbContext.Fornecedores.FirstOrDefaultAsync(x => x.Id == id);
+            if (fornecedorPorId == null)
+            {
+                throw new Exception("Fornecedor" + id + "não foi encontrado.");
+            }
+
+            _dbContext.Fornecedores.Remove(fornecedorPorId);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }

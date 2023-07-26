@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ORl9rn4s7oGvTqGOYiYbWs0wCeUSoeIEhs9ScADyiIf77/wZiHaVPB4xQ1913DaZQQp0bK9mied/IumpmC2KGQ==",
+  "dgSpecHash": "IZPyYVW5e41XvDpYnsy3kGpcqX2JeAwU93KcXWg4gC/n8oic9AAMQ52UmawzbKUTnqY9T/gRrIRCpKidAhe6wg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\alyss\\Desktop\\Nova pasta\\SistemaPedidos\\SistemaPedidos.csproj",
+  "projectFilePath": "C:\\Users\\alyss\\Desktop\\Projetos Git\\SistemaPedidos\\SistemaPedidos\\SistemaPedidos.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\alyss\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\alyss\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",

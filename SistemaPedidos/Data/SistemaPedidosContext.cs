@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaPedidos.Data.Map;
 using SistemaPedidos.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SistemaPedidos.Data
 {

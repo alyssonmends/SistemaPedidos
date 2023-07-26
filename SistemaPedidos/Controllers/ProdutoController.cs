@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SistemaPedidos.Data;
 using SistemaPedidos.Models;
+using SistemaPedidos.Repositorios.Interfaces;
 
 namespace SistemaPedidos.Controllers
 {
@@ -14,95 +10,47 @@ namespace SistemaPedidos.Controllers
     [ApiController]
     public class ProdutoController : ControllerBase
     {
-        private readonly SistemaPedidosContext _context;
+        private readonly IProdutoRepositorio _produtoRepositorio;
 
-        public ProdutoController(SistemaPedidosContext context)
+        public ProdutoController(IProdutoRepositorio produtoRepositorio)
         {
-            _context = context;
+            _produtoRepositorio = produtoRepositorio;
         }
 
-        // GET: api/Produto
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProdutoModel>>> GetProdutos()
+        public async Task<ActionResult<List<ProdutoModel>>> BuscarProdutos()
         {
-            return await _context.Produtos.ToListAsync();
+            List<ProdutoModel> produtos = await _produtoRepositorio.BuscarProdutos();
+            return Ok(produtos);
         }
 
-        // GET: api/Produto/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProdutoModel>> GetProdutoModel(int id)
+        public async Task<ActionResult<ProdutoModel>> BuscarPorId(int id)
         {
-            var produtoModel = await _context.Produtos.FindAsync(id);
-
-            if (produtoModel == null)
-            {
-                return NotFound();
-            }
-
-            return produtoModel;
+            ProdutoModel produto = await _produtoRepositorio.BuscarPorId(id);
+            return Ok(produto);
         }
 
-        // PUT: api/Produto/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProdutoModel(int id, ProdutoModel produtoModel)
-        {
-            if (id != produtoModel.Codigo)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(produtoModel).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProdutoModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Produto
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ProdutoModel>> PostProdutoModel(ProdutoModel produtoModel)
+        public async Task<ActionResult<ProdutoModel>> AdicionarProduto([FromBody] ProdutoModel produtoModel)
         {
-            _context.Produtos.Add(produtoModel);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProdutoModel", new { id = produtoModel.Codigo }, produtoModel);
+            ProdutoModel produto = await _produtoRepositorio.AdicionarProduto(produtoModel);
+            return Ok(produto);
         }
 
-        // DELETE: api/Produto/5
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ProdutoModel>> AtualizarProduto([FromBody] ProdutoModel produtoModel, int id)
+        {
+            produtoModel.Codigo = id;
+            ProdutoModel produto = await _produtoRepositorio.AtualizarProduto(produtoModel, id);
+            return Ok(produto);
+        }
+
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProdutoModel(int id)
+        public async Task<ActionResult<ProdutoModel>> DeletarProduto(int id)
         {
-            var produtoModel = await _context.Produtos.FindAsync(id);
-            if (produtoModel == null)
-            {
-                return NotFound();
-            }
-
-            _context.Produtos.Remove(produtoModel);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ProdutoModelExists(int id)
-        {
-            return _context.Produtos.Any(e => e.Codigo == id);
+            bool deletado = await _produtoRepositorio.DeletarProduto(id);
+            return Ok(deletado);
         }
     }
 }
