@@ -3,15 +3,14 @@ import BannerImage from "../../assets/images/bannerSystem.png";
 import SystemName from "../Logo/SystemName";
 
 function SystemBanner() {
-
     return <>
         <Container>
             <Content>
-                <TextBanner>
-                    <SystemName/>
-                    <Text>A sua loja virtual, onde qualidade e praticidade se encontram</Text>
-                </TextBanner>
-                <Image src={BannerImage} alt="banner" width={500} height={400}/>
+                <div>
+                    <SystemName fontSize={""}/>
+                    <p>A sua loja virtual, onde qualidade e praticidade se encontram.</p>
+                </div>
+                <img src={BannerImage} alt="banner" width={500} height={400}/>
             </Content>
         </Container>
         </>
@@ -21,26 +20,13 @@ export default SystemBanner;
 
 export const Container = styled.div`
     width: 100%;
-    padding: 50px 0;
 `;
 
 export const Content = styled.div`
-    max-width: 1100px;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    justify-content: space-between;
-`;
-
-export const TextBanner = styled.div`
-
-`;
-
-export const Text = styled.p`
-
-`;
-
-export const Image = styled.img`
-
+    justify-content: space-around;
+    align-items: center;
 `;

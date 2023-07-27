@@ -22,6 +22,7 @@ namespace SistemaPedidos.Repositorios
         {
             return await _dbContext.Pedidos
                 .Include(x => x.Produto)
+                .Include(x => x.Produto.Fornecedor)
                 .ToListAsync();
         }
 
@@ -29,6 +30,7 @@ namespace SistemaPedidos.Repositorios
         {
             var pedidos = await _dbContext.Pedidos
              .Include(x => x.Produto)
+             .Include(x => x.Produto.Fornecedor)
              .ToListAsync();
             var pedidosPorFornecedor = pedidos.Where(y => y.Produto.FornecedorId == id)
              .ToList();
@@ -39,6 +41,7 @@ namespace SistemaPedidos.Repositorios
         {
             return await _dbContext.Pedidos
                 .Include(x => x.Produto)
+                .Include(x => x.Produto.Fornecedor)
                 .FirstOrDefaultAsync(x => x.Codigo == id);
         }
 

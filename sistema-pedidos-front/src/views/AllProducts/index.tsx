@@ -5,108 +5,74 @@ import Header from "../../layout/components/Header/Header";
 import { ProductI } from "../../constant/interface";
 import Card from "./components/Card/Card";
 import styled from "styled-components";
+import { productsData } from "../../constant/data";
+import { formatResponseProducts } from "../../helpers/formatResponse";
 
 function AllProducts() {
+  const [supplierName, setSupplierName] = useState<string>("");
+  const [supplierId, setSupplierId] = useState<string>("");
   const [products, setProducts] = useState<ProductI[]>([]);
 
+    useEffect(() => {
+      var json = localStorage.getItem("supplier") || "";
+      const data = JSON.parse(json);
+      setSupplierName(data.supplier.label);
+      setSupplierId(data.supplier.value);
+    }, [])
+
+
   useEffect(() => {
-    setProducts([
-      {
-        codigo: 0,
-        descricao: "Café",
-        data: "",
-        valor: 3,
-        forOrder: false
-      },
-      {
-        codigo: 1,
-        descricao: "Nescau",
-        data: "",
-        valor: 3,
-        forOrder: false
-      },
-      {
-        codigo: 2,
-        descricao: "Cappucino",
-        data: "",
-        valor: 3,
-        forOrder: false
-      },
-      {
-        codigo: 3,
-        descricao: "Refri",
-        data: "",
-        valor: 3,
-        forOrder: false
-      },
-      {
-        codigo: 4,
-        descricao: "Bolo",
-        data: "",
-        valor: 3,
-        forOrder: false
-      }
-    ]);
+    setProducts(formatResponseProducts(productsData));
   }, []);
 
-  const confirmOrder = () => {
-    // Fazer pedido
-    console.log(products.filter(product => product.forOrder == true))
-  }
-
-  const addOrder = (index: number) => {
-    const productsTemp : ProductI[] = [];
-
-    products.map((product, i) => {
-      if (i != index){
-        productsTemp.push(product)
-      }else{
-        const prod ={
-          codigo: product.codigo,
-          descricao: product.descricao,
-          data: product.data,
-          valor: product.valor,
-          forOrder: !product.forOrder
-        }
-        productsTemp.push(prod)
-      }
-    })
-    setProducts(productsTemp);
+  const addOrder = (code: number, counter: number, value: number) => {
+    const body = {
+      "produtoId": 1,
+      "quantidadeProdutos": counter,
+      "valorTotal": counter*value
+    }
+    console.log("Dados", body)
   }
 
   return (
-    <>
+    <Container>
       <Header
-        supplierName={"Sabores Saudáveis"}
-        actionText={"Trocar de loja"}
-      />
-      <SectionTitle title={"Nossos Produtos"} />
+        actionText={"Voltar"} actionUrl={"/"}      />
+      <Flex>
+        <SectionTitle title={`Todos os produtos do fornecedor ${supplierName}`} />
+      </Flex>
       <Flex>
         {products.map((product, index) => (
           <Card
             key={index}
-            code={product.codigo}
-            description={product.descricao}
-            value={product.valor}
-            forOrder={product.forOrder}
+            code={product.code}
+            description={product.description}
+            value={product.value}
             addOrder={addOrder}
             index={index}
             />
         ))}
       </Flex>
-      <ButtonS onClick={() => confirmOrder()}>Fazer pedido</ButtonS>
       <Footer />
-    </>
+    </Container>
   );
 }
 
 export default AllProducts;
 
+export const Container = styled.div`
+  padding: 0 50px;
+`;
+
 export const ButtonS = styled.button`
-  border: none;
+  background-color: ${({theme}) => theme.colors.secondary};
+  color: ${({theme}) => theme.colors.white};
+  display: flex;
+  align-items: center;
+  font-size: 14px;
   border-radius: 6px;
   padding: 10px;
-  margin-left: 10px;
+  border: none;
 `;
 
 export const Flex = styled.div`

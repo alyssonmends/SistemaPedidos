@@ -5,20 +5,20 @@ function SuppliersMenu() {
 
     return <>
         <Nav>
-            <Button text={"Visualizar produtos"} url={"#"} />
-            <Button text={"VISUALIZAR PEDIDOS"} url={"#"} />
+            <Button text={"Lista de produtos da loja"} url={"/todos-produtos-loja"} />
+            <Button text={"Visualizar pedidos"} url={"/pedidos-loja"} />
+            <Button text={"Voltar"} url={"/"} />
         </Nav>
     </>
 }
 
 export default SuppliersMenu;
 
- 
+
 export const Nav = styled.nav`
-    margin-top: 40px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
-`;
+    `;

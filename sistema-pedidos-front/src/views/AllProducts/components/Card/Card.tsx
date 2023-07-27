@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import CarImage from "../../../../assets/images/car.png";
+import { useState } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
+import { RxDividerHorizontal } from "react-icons/rx";
 
 interface CardProps{
   code: number;
@@ -7,19 +10,41 @@ interface CardProps{
   value: number;
   addOrder: Function;
   index: number;
-  forOrder: boolean;
 }
 
-function Card({code, description,value, addOrder, index, forOrder}: CardProps) {
-  console.log(forOrder)
+function Card({code, description,value, addOrder, index}: CardProps) {
+
+  const [counter, setCounter] = useState<number>(0);
+  const increase = () => {
+    setCounter(count => count + 1);
+  };
+  const decrease = () => {
+    if (counter > 0) setCounter(count => count - 1);
+  };
+
   return (
     <>
       <CardBlock>
-          <CodeS>{code}</CodeS>
           <DescriptionS>{description}</DescriptionS>
+          <CodeS>Código: {code}</CodeS>
           <Flex>
             <ValueS>R$ {value}</ValueS>
-            <ButtonS forOrder={forOrder} onClick={() => addOrder(index)}><img src={CarImage} alt="" /></ButtonS>
+            <div>
+              <ButtonCounter onClick={() => decrease()}>
+                <RxDividerHorizontal />
+              </ButtonCounter>
+              <span>{counter}</span>
+              <ButtonCounter onClick={() => increase()}>
+                <AiOutlinePlus />
+              </ButtonCounter>
+            </div>
+          </Flex>
+          <Flex>
+            <CodeS>Valor total: R$ {value*counter}</CodeS>
+            <ButtonS onClick={() => addOrder(code, counter, value)}>
+              <img src={CarImage} alt="" />
+              Fazer pedido
+            </ButtonS>
           </Flex>
       </CardBlock>
     </>
@@ -37,22 +62,21 @@ export const CardBlock = styled.div`
   align-items: center;
   padding: 15px 10px;
   width: 20%;
-  margin: 10px;
+  margin: 20px 1px;
 `;
 
 export const Flex = styled.div`
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-
+  width: -webkit-fill-available;
+  margin: 10px 0;
 `;
 
 export const CodeS = styled.p`
-  background-color: ${({theme}) => theme.colors.secondary};
   border-radius: 6px;
-  padding: 10px;
 `;
 
 export const DescriptionS = styled.h3`
@@ -65,10 +89,23 @@ export const ValueS = styled.p`
 
 `;
 
-export const ButtonS = styled.button.attrs((props: {forOrder: boolean}) => props)`
-  background-color: ${(props) => props.forOrder ? "#064E3B" : "#58c477"};
+export const ButtonS = styled.button`
+  background-color: #58c477;
+  color: #FFF;
   border: none;
   border-radius: 6px;
   padding: 10px;
   margin-left: 10px;
+  gap: 10px;
+`;
+
+
+export const ButtonCounter = styled.button`
+  background-color: #58c477;
+  color: #FFF;
+  border: none;
+  border-radius: 15px;
+  padding: 5px;
+  margin: 0 10px;
+  gap: 10px;
 `;

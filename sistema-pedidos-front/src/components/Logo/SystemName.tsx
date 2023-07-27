@@ -1,16 +1,22 @@
 import styled from "styled-components";
 
-function SystemName() {
+interface SystemNameProps{
+    fontSize: string;
+}
+
+function SystemName({fontSize}: SystemNameProps) {
 
     return <>
-        <SystemNameS>AMOnlineStore</SystemNameS>
+        <SystemNameS fontSize={fontSize}>AMOnlineStore</SystemNameS>
     </>
 }
 
 export default SystemName;
 
  
-export const SystemNameS = styled.h1`
+export const SystemNameS = styled.h1.attrs((props: {fontSize: string}) => props)`
     text-align: center;
     color: ${({theme}) => theme.colors.primary};
+    font-size: ${(props) => props.fontSize};
+    margin: 0;
 `;

@@ -75,13 +75,21 @@ export const StyledTable = styled.div`
   thead {
     font-weight: normal;
     height: 2rem;
-    color: ${({ theme }) => theme.colors.black};
+    color: ${({ theme }) => theme.colors.white};
   }
 
-  td,
   th {
     text-align: left;
     padding: 1rem;
+    border-bottom: 0.25px solid ${({ theme }) => theme.colors.primary};
+    background: ${({ theme }) => theme.colors.primary};
+  }
+
+  td{
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 0.25px solid
+    ${({ theme }) => theme.colors.primary};
   }
 
   tbody {
@@ -92,7 +100,7 @@ export const StyledTable = styled.div`
   }
 
   td {
-    height: 4rem;
+    height: 1rem;
     color: ${({ theme }) => theme.colors.gray};
     max-width: auto;
   }

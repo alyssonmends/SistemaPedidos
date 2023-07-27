@@ -1,10 +1,24 @@
 
-export interface ProductI {
+export interface ProductResponseI {
     codigo: number,
     descricao: string,
-    data: string,
+    dataCadastro: string,
     valor: number,
-    forOrder: boolean
+    fornecedorId: number,
+    fornecedor: SupplierI
+}
+
+export interface IOptionsSimpleSelect {
+    value: string;
+    label: string;
+  }
+  
+
+export interface ProductI {
+    code: number,
+    description: string,
+    date: string,
+    value: number,
 }
 
 export interface SupplierI {
@@ -19,17 +33,20 @@ export interface SupplierI {
 export interface ProductForOrderI {
     codigo: number,
     descricao: string,
-    data: string,
+    dataCadastro: string,
+    fornecedorId: string,
     valor: number
 }
 
 export interface OrdersI {
     codigo: number,
     dataPedido: string,
+    produtoId: string,
     produto: ProductForOrderI,
     quantidadeProdutos: number,
     fornecedor: SupplierI,
-    valorTotal: number
+    valorTotal: number,
+    fornecedorId: number,
 }
 
 export interface OrdersTableI{
@@ -38,5 +55,25 @@ export interface OrdersTableI{
     value: string;
     quantity: number;
     date: string;
+    action: any;
+    produtoId: string;
+  }
+
+export interface SuppliersTableI{
+    id: number,
+    businessName: string,
+    cnpj: number,
+    uf: string,
+    email: string,
+    name: string
+    action: any;
+  }
+  
+  export interface ProductsTableI{
+    code: number;
+    description: string;
+    date: string;
+    value: number;
+    action: any;
   }
   

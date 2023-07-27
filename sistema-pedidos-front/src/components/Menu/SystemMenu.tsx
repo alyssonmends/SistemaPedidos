@@ -1,27 +1,52 @@
 import styled from "styled-components";
 import Button from "../Button/Button";
+import { CustomModal } from "../Modal/CustomModal";
+import { useState } from "react";
+import { FormSelectSupplier } from "../../views/Home/components/FormSelectSupplier";
 
 
 function SystemMenu() {
+    
+    const [showModal, setShowModal] = useState(false);
 
     return <>
         <Nav>
-            <Button text={"entre na sua loja"} url={"#"} />
-            <Button text={"Ainda não tem loja cadastrada? Cadastre aqui"} url={"#"} />
-            <Button text={"VOCÊ É CONSUMIDOR?"} url={"#"} />
-            <Button text={"VISUALIZAR TODOS OS PEDIDOS JÁ CRIADOS NA AMONLINESTOR"} url={"#"} />
+            <ButtonModal onClick={() => setShowModal(true)}>Fazer um pedido</ButtonModal>
+            <Button text={"Lista dos fornecedores da AMOnlineStore"} url={"/todos-fornecedores"} />
+            <Button text={"Lista de pedidos já criados na AMOnlineStore"} url={"/todos-pedidos"} />
         </Nav>
+        {showModal && (
+            <CustomModal
+                show={showModal}
+                title={"Fornecedor"}
+                onClose={() => setShowModal(false)}
+                >
+                <FormSelectSupplier
+                    closeModal={() => setShowModal(false)}
+                />
+            </CustomModal>
+        )}
     </>
 }
 
 export default SystemMenu;
 
- 
+
+
+export const ButtonModal = styled.button`
+    background-color: ${({theme}) => theme.colors.secondary};
+    color: ${({theme}) => theme.colors.white};
+
+    font-size: 14px;
+    border-radius: 6px;
+    padding: 10px;
+    border: none;
+`;
+
 export const Nav = styled.nav`
-    margin-top: 40px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
 `;

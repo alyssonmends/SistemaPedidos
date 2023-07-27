@@ -4,7 +4,7 @@ import SystemName from "../../../components/Logo/SystemName";
 function Footer() {
 
     return <>
-        <SystemName />
+        <SystemName fontSize={"12px"} />
     </>
 }
 
