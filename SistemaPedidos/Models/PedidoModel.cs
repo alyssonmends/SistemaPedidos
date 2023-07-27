@@ -15,5 +15,10 @@ namespace SistemaPedidos.Models
         public int QuantidadeProdutos { get; set; }
 
         public float ValorTotal { get; set; }
+
+        public PedidoModel()
+        {
+            DataPedido = DateTime.Now;
+        }
     }
 }

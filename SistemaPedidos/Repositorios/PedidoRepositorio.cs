@@ -59,7 +59,7 @@ namespace SistemaPedidos.Repositorios
 
             if(pedidoPorId == null)
             {
-                throw new Exception("Pedido" + id + "não foi encontrado.");
+                throw new Exception("Pedido " + id + " não foi encontrado.");
             }
 
             pedidoPorId.Codigo = pedido.Codigo;
@@ -79,7 +79,7 @@ namespace SistemaPedidos.Repositorios
 
             if (pedidoPorId == null)
             {
-                throw new Exception("Pedido" + id + "não foi encontrado.");
+                throw new Exception("Pedido " + id + " não foi encontrado.");
             }
 
             _dbContext.Pedidos.Remove(pedidoPorId);

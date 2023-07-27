@@ -49,21 +49,25 @@ function AllProducts() {
   }, [supplierId])
 
   const addOrder = (code: number, counter: number, value: number) => {
-    const body = {
-      "produtoId": 1,
-      "quantidadeProdutos": counter,
-      "valorTotal": counter*value
-    }
-    orderEndpoints
-      .create(body)
-      .then(({ data }) => {
-        window.location.reload();
-      })
-      .catch((error) =>
-        toast.error("Não foi possível criar pedido!", {
-          toastId: `${error?.message}`,
+    if (counter == 0){
+      toast.error("Não pode fazer pedido com a quantidade do produzo zerada")
+    }else{
+      const body = {
+        "produtoId": code,
+        "quantidadeProdutos": counter,
+        "valorTotal": counter*value
+      }
+      orderEndpoints
+        .create(body)
+        .then(({ data }) => {
+          window.location.reload();
         })
-      );
+        .catch((error) =>
+          toast.error("Não foi possível criar pedido!", {
+            toastId: `${error?.message}`,
+          })
+        );
+    }
   }
 
   return (

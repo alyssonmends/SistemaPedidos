@@ -14,5 +14,10 @@ namespace SistemaPedidos.Models
 
         public int FornecedorId { get; set; }
         public FornecedorModel Fornecedor { get; set; }
+
+        public ProdutoModel()
+        {
+            DataCadastro = DateTime.Now;
+        }
     }
 }

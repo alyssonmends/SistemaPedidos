@@ -56,7 +56,7 @@ namespace SistemaPedidos.Repositorios
 
             if(produtoPorId == null)
             {
-                throw new Exception("Produto" + id + "não foi encontrado.");
+                throw new Exception("Produto " + id + " não foi encontrado.");
             }
 
             produtoPorId.Codigo = produto.Codigo;
@@ -74,9 +74,15 @@ namespace SistemaPedidos.Repositorios
         {
             ProdutoModel produtoPorId = await BuscarPorId(id);
 
+            PedidoModel pedidoModel = await _dbContext.Pedidos.FirstOrDefaultAsync(x => x.ProdutoId == id);
+
             if (produtoPorId == null)
             {
                 throw new Exception("Produto" + id + "não foi encontrado.");
+            }
+            else if (pedidoModel != null)
+            {
+                throw new Exception("Produto " + id + " tem cadastro em pedido.");
             }
 
             _dbContext.Produtos.Remove(produtoPorId);

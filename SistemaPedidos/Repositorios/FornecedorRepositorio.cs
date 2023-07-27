@@ -42,7 +42,7 @@ namespace SistemaPedidos.Repositorios
 
             if(fornecedorPorId == null)
             {
-                throw new Exception("Fornecedor" + id + "não foi encontrado.");
+                throw new Exception("Fornecedor " + id + " não foi encontrado.");
             }
 
             fornecedorPorId.Cnpj = fornecedor.Cnpj;
