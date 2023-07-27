@@ -5,6 +5,8 @@ import styled, { ThemeContext } from "styled-components";
 import { ButtonComponent } from "../../../components/Button/ButtonComponent";
 import { Form } from "../../../components/Ui/form";
 import { createUpdateProductSchema } from "../../../constant/schema";
+import { productEndpoints } from "../../../services/endpoints";
+import { toast } from "react-toastify";
 
 interface FormProductProps {
   closeModal: Function;
@@ -25,14 +27,23 @@ export function FormProduct({
     ),
   });
 
-  const done = (
+  const done = async (
     data: any
   ) => {
     const body = {
       ...data, 
       "fornecedorId": supplierId,
     }
-    console.log("Dados", body);
+    await productEndpoints
+      .create(body)
+      .then(({ data }) => {
+        window.location.reload();
+      })
+      .catch((error) =>
+        toast.error("Não foi possível criar produto!", {
+          toastId: `${error?.message}`,
+        })
+      );
     closeModal();
   };
 

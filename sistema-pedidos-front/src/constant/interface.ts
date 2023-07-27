@@ -35,7 +35,8 @@ export interface ProductForOrderI {
     descricao: string,
     dataCadastro: string,
     fornecedorId: string,
-    valor: number
+    valor: number,
+    fornecedor: SupplierI,
 }
 
 export interface OrdersI {
@@ -43,8 +44,7 @@ export interface OrdersI {
     dataPedido: string,
     produtoId: string,
     produto: ProductForOrderI,
-    quantidadeProdutos: number,
-    fornecedor: SupplierI,
+    quantidadeProdutos: number,    
     valorTotal: number,
     fornecedorId: number,
 }

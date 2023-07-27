@@ -5,7 +5,7 @@ namespace SistemaPedidos.Models
     {
         public int Id { get; set; }
 
-        public int Cnpj { get; set; }
+        public string Cnpj { get; set; }
 
         public string Uf { get; set; }
 

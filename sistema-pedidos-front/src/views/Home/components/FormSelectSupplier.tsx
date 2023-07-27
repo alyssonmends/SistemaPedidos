@@ -9,6 +9,8 @@ import useAxios from "../../../hooks/useAxios";
 import { IOptionsSimpleSelect } from "../../../constant/interface";
 import {  useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { formatResponseSuppliersForSelect } from "../../../helpers/formatResponse";
+import { suppliersData } from "../../../constant/data";
 
 interface FormSelectSupplierProps {
   closeModal: Function;
@@ -24,21 +26,15 @@ export function FormSelectSupplier({
   const [option, setOptions] = useState<IOptionsSimpleSelect[]>([]);
   const { response, error, loaded, loading } = useAxios({
     method: "get",
-    url: "​/Fornecedor",
+    url: "/Fornecedor",
     body: {},
   });
 
   useEffect(() => {
     // TO DO
     if (response) {
-      console.log("response", response)
-      setOptions(
-        [{
-          label: "Master LTDA", value: "1"
-        }, {
-          label: "Alpha", value: "2"
-        }]
-      );
+      setOptions(formatResponseSuppliersForSelect(response));
+      console.log(formatResponseSuppliersForSelect(response))
     } else if (error) {
       const errorMessage = "Não foi possível carregar a lista de produtos";
       toast.error(errorMessage, { toastId: errorMessage });
@@ -73,8 +69,8 @@ export function FormSelectSupplier({
         <form autoComplete="off" onSubmit={handleSubmit(select)}>
           <ContentForm>
             <SectionName>{"Selecione o fornecedor"}</SectionName>
-            <Form.Field className="formUnit">
-                <Form.Label htmlFor="unit">{"Unidade"}</Form.Label>
+            <Form.Field >
+                <Form.Label htmlFor="supplier">{"Fornecedor"}</Form.Label>
                 <Form.SimpleSelectForForm
                   name="supplier"
                   control={control}

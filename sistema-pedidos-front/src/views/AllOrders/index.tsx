@@ -7,31 +7,28 @@ import { OrdersI, OrdersTableI } from "../../constant/interface";
 import { DefaultTable } from "../../components/Table/Table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { formatResponseOrders } from "../../helpers/formatResponse";
-import { AiFillDelete } from 'react-icons/ai';
+import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import { ordersData } from "../../constant/data";
 import useAxios from "../../hooks/useAxios";
 import { orderEndpoints } from "../../services/endpoints";
+import { api } from "../../services/api";
+import { toast } from "react-toastify";
 
 function AllOrders() {
   const [orders, setOrders] = useState<OrdersI[]>([]);
   const [columns, setColumns] = useState<ColumnDef<OrdersTableI, any>[]>();
-  const { response, error, loaded, loading } = useAxios({
-    method: "get",
-    url: "/​Pedido​/fornecedor​/",
-    body: {},
-  });
 
   useEffect(() => {
-    // TO DO
-    // if (response) {
-      setOrders(
-        formatResponseOrders(ordersData)
-      );
-    // } else if (error) {
-    //   const errorMessage = "Não foi possível carregar a lista de produtos";
-    //   toast.error(errorMessage, { toastId: errorMessage });
-    // }
-  }, [response, error]);
+      api.get(`/Pedido`)
+        .then(function (response) {
+           setOrders(
+            formatResponseOrders(response.data)
+          );
+        }).catch(function (error) {
+          const errorMessage = "Não foi possível carregar a lista de pedidos";
+          toast.error(errorMessage, { toastId: errorMessage });
+        });
+  }, [])
 
   const columnHelper = createColumnHelper<OrdersTableI>();
 
@@ -59,8 +56,8 @@ function AllOrders() {
       }),
       columnHelper.accessor("action", {
         cell: (info) => <Flex>
-          <AiFillDelete onClick={() => removeOrder(info.row.original.produtoId)}/>
-          {/* <AiFillEdit onClick={() => {}}/> */}
+          <AiFillDelete onClick={() => removeOrder(info.row.original.code.toString())}/>
+          <AiFillEdit onClick={() => {}}/>
         </Flex>,
         header: () => <span>{}</span>,
       }),
@@ -69,9 +66,11 @@ function AllOrders() {
 
   const removeOrder = async (id: string) => {
     if (id) {
-      console.log(orderEndpoints.remove, id);
-      // TO DO
-      //await productEndpoints.remove(id);
+      await orderEndpoints.remove(id).then(function (response) {
+        window.location.reload();
+      }).catch((error) => {
+        toast.error("Não foi possível deletar o pedido")
+      })
     }
   };
 
@@ -100,15 +99,16 @@ export const Flex = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  svg{
+    cursor: pointer;
+  }
 `;
 
 export const HeaderOrder = styled.div`
-  // background-color: ${({ theme }) => theme.colors.quaternary};
   display: flex;
   flex-direction: row;
   align-items: left;
   justify-content: space-around;
-  // padding: 15px 40px;
   width: 100%;
   margin-bottom: 10px;
 `;

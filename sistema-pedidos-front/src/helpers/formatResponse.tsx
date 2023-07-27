@@ -1,4 +1,4 @@
-import { OrdersI, OrdersTableI, ProductI, ProductResponseI, ProductsTableI, SupplierI, SuppliersTableI } from "../constant/interface";
+import { IOptionsSimpleSelect, OrdersI, OrdersTableI, ProductI, ProductResponseI, ProductsTableI, SupplierI, SuppliersTableI } from "../constant/interface";
 import { formatDate } from "./formatDate";
 
 export const formatResponseOrders = (data: OrdersI[]) => {
@@ -8,7 +8,7 @@ export const formatResponseOrders = (data: OrdersI[]) => {
         (order: OrdersI) => {
           const d = {
             code: order.codigo,
-            supplierName: order?.fornecedor?.nome || "-",
+            supplierName: order?.produto?.fornecedor?.nome || "-",
             value: `${order.valorTotal}`,
             quantity: order.quantidadeProdutos,
             date: formatDate(order.dataPedido),
@@ -57,6 +57,23 @@ export const formatResponseSuppliers = (data: SupplierI[]) => {
           businessName: supplier.razaoSocial,
           nome: supplier.nome,
           email: supplier.email,
+        } as any;
+        suppliersForTable.push(d)
+      }
+    );
+    return suppliersForTable;
+  } catch (err) {
+    return [] as any;
+  }
+};
+
+export const formatResponseSuppliersForSelect = (data: SupplierI[]) => {
+  try {
+    var suppliersForTable: IOptionsSimpleSelect[] = [];
+    data.map(
+      (supplier: SupplierI) => {
+        const d ={
+          label: supplier.razaoSocial, value: supplier.id.toString()
         } as any;
         suppliersForTable.push(d)
       }

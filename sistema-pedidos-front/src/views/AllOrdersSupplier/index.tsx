@@ -13,6 +13,7 @@ import { orderEndpoints } from "../../services/endpoints";
 import useAxios from "../../hooks/useAxios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../services/api";
 
 function AllOrdersSupplier() {
   const [orders, setOrders] = useState<OrdersI[]>([]);
@@ -33,23 +34,19 @@ function AllOrdersSupplier() {
     }
   }, [])
 
-  const { response, error, loaded, loading } = useAxios({
-    method: "get",
-    url: `/​Pedido​/fornecedor​/${supplierId}`,
-    body: {},
-  });
-
-  useEffect(() => {
-    // TO DO
-    // if (response) {
-      setOrders(
-        formatResponseOrders(ordersData)
-      );
-    // } else if (error) {
-    //   const errorMessage = "Não foi possível carregar a lista de produtos";
-    //   toast.error(errorMessage, { toastId: errorMessage });
-    // }
-  }, [response, error]);
+    useEffect(() => {
+    if(supplierId != ""){
+      api.get(`/Pedido/fornecedor/${supplierId}`)
+        .then(function (response) {
+           setOrders(
+            formatResponseOrders(response.data)
+          );
+        }).catch(function (error) {
+          const errorMessage = "Não foi possível carregar a lista de pedidos";
+          toast.error(errorMessage, { toastId: errorMessage });
+        });
+    }
+  }, [supplierId])
 
   const columnHelper = createColumnHelper<OrdersTableI>();
 

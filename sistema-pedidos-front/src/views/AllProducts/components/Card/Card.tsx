@@ -9,10 +9,9 @@ interface CardProps{
   description: string;
   value: number;
   addOrder: Function;
-  index: number;
 }
 
-function Card({code, description,value, addOrder, index}: CardProps) {
+function Card({code, description,value, addOrder}: CardProps) {
 
   const [counter, setCounter] = useState<number>(0);
   const increase = () => {

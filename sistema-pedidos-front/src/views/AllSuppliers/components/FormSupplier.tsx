@@ -5,6 +5,8 @@ import styled, { ThemeContext } from "styled-components";
 import { ButtonComponent } from "../../../components/Button/ButtonComponent";
 import { createUpdateSupplierSchema } from "../../../constant/schema";
 import { Form } from "../../../components/Ui/form";
+import { supplierEndpoints } from "../../../services/endpoints";
+import { toast } from "react-toastify";
 
 interface FormSupplierProps {
   closeModal: Function;
@@ -15,7 +17,6 @@ export function FormSupplier({
 }: FormSupplierProps) {
 
   const { colors } = useContext(ThemeContext);
-
   const createUpdateCollaboratorForm = useForm<any
   >({
     resolver: zodResolver(
@@ -23,10 +24,19 @@ export function FormSupplier({
     ),
   });
 
-  const done = (
+  const done = async (
     data: any
   ) => {
-    console.log("Dados", data);
+    await supplierEndpoints
+      .create(data)
+      .then(({ data }) => {
+        window.location.reload();
+      })
+      .catch((error) =>
+        toast.error("Não foi possível criar fornecedor!", {
+          toastId: `${error?.message}`,
+        })
+      );
     closeModal();
   };
 

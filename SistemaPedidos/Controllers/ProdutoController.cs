@@ -9,7 +9,6 @@ namespace SistemaPedidos.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("ReactPolicy")]
     public class ProdutoController : ControllerBase
     {
         private readonly IProdutoRepositorio _produtoRepositorio;

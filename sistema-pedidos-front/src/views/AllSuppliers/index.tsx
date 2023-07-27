@@ -9,11 +9,12 @@ import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import { suppliersData } from "../../constant/data";
 import useAxios from "../../hooks/useAxios";
-import { orderEndpoints } from "../../services/endpoints";
+import { orderEndpoints, supplierEndpoints } from "../../services/endpoints";
 import { formatResponseSuppliers } from "../../helpers/formatResponse";
 import { useNavigate } from "react-router-dom";
 import { CustomModal } from "../../components/Modal/CustomModal";
 import { FormSupplier } from "./components/FormSupplier";
+import { toast } from "react-toastify";
 
 function AllSuppliers() {
 
@@ -22,20 +23,19 @@ function AllSuppliers() {
   const [columns, setColumns] = useState<ColumnDef<SuppliersTableI, any>[]>();
   const { response, error, loaded, loading } = useAxios({
     method: "get",
-    url: "/​Fornecedor",
+    url: "/Fornecedor",
     body: {},
   });
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // TO DO
-    // if (response) {
-      setSupplier(formatResponseSuppliers(suppliersData));
-    // } else if (error) {
-    //   const errorMessage = "Não foi possível carregar a lista de produtos";
-    //   toast.error(errorMessage, { toastId: errorMessage });
-    // }
+    if (response) {
+      setSupplier(formatResponseSuppliers(response));
+    } else if (error) {
+      const errorMessage = "Não foi possível carregar a lista de produtos";
+      toast.error(errorMessage, { toastId: errorMessage });
+    }
   }, [response, error]);
 
   const columnHelper = createColumnHelper<SuppliersTableI>();
@@ -65,7 +65,7 @@ function AllSuppliers() {
       columnHelper.accessor("action", {
         cell: (info) => <Flex>
           <ButtonS onClick={() => {
-              navigate("/todos-produtos-loja", {replace: true});
+              navigate("/todos-produtos-loja", { replace: true});
               localStorage.setItem("supplier", JSON.stringify({"supplier":{"value":info.row.original.id,"label": info.row.original.businessName}}));
           }}>Produtos</ButtonS>
           <ButtonS onClick={() => {
@@ -82,9 +82,11 @@ function AllSuppliers() {
 
   const removeSupplier = async (id: string) => {
     if (id) {
-      console.log(orderEndpoints.remove, id);
-      // TO DO
-      //await productEndpoints.remove(id);
+      await supplierEndpoints.remove(id).then(function (response) {
+        window.location.reload();
+      }).catch((error) => {
+        toast.error("Não foi possível deletar o fornecedor")
+      })
     }
   };
 
@@ -140,6 +142,10 @@ export const Flex = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+
+  svg{
+    cursor: pointer;
+  }
 `;
 
 export const HeaderOrder = styled.div`

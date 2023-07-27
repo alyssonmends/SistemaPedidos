@@ -20,7 +20,7 @@ const useAxios = ({ url, method, body = null}: PropsAxios) => {
 
     try {
       console.log(url)
-      const result = await api.get("https://localhost:5001/api/Fornecedor", {
+      const result = await api[method](url, body, {
         headers: {
           'Content-Type': 'application/json',
         }

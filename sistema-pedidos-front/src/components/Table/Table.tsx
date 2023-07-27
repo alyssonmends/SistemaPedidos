@@ -15,7 +15,6 @@ import {
     columns,
   }: DefaultTableProps) {
 
-    console.log(data)
     const table = useReactTable({
       data,
       columns,

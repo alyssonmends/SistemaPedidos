@@ -12,9 +12,10 @@ import useAxios from "../../hooks/useAxios";
 import { productEndpoints } from "../../services/endpoints";
 import { CustomModal } from "../../components/Modal/CustomModal";
 import { FormProduct } from "./components/FormSupplier";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { formatResponseProducts } from "../../helpers/formatResponse";
+import { api } from "../../services/api";
 
 function AllProductsSupplier() {
   const [products, setProducts] = useState<ProductI[]>([]);
@@ -23,8 +24,8 @@ function AllProductsSupplier() {
   const [supplierId, setSupplierId] = useState<string>("");
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-  
-  useEffect(() => {
+
+  useEffect( () =>  {
     var json = localStorage.getItem("supplier") || "";
     if (json == ""){
       navigate("/", {replace: true})
@@ -35,22 +36,19 @@ function AllProductsSupplier() {
       setSupplierId(data.supplier.value);
     }
   }, [])
-    
-  const { response, error, loaded, loading } = useAxios({
-    method: "get",
-    url: "/Produto​",
-    body: {},
-  });
-
+ 
   useEffect(() => {
-    // TO DO
-    // if (response) {
-      setProducts(formatResponseProducts(productsData));
-    // } else if (error) {
-    //   const errorMessage = "Não foi possível carregar a lista de produtos";
-    //   toast.error(errorMessage, { toastId: errorMessage });
-    // }
-  }, [response, error]);
+    if(supplierId != ""){
+      api.get(`/Produto/fornecedor/${supplierId}`)
+        .then(function (response) {
+          console.log(response.data);
+          setProducts(formatResponseProducts(response.data));
+        }).catch(function (error) {
+          const errorMessage = "Não foi possível carregar a lista de produtos";
+          toast.error(errorMessage, { toastId: errorMessage });
+        });
+    }
+  }, [supplierId])
 
   const columnHelper = createColumnHelper<ProductsTableI>();
 
@@ -75,7 +73,7 @@ function AllProductsSupplier() {
       columnHelper.accessor("action", {
         cell: (info) => <Flex>
           {/* TO DO */}
-          <AiFillDelete onClick={() => removeProduct("info.row.original.")}/>
+          <AiFillDelete onClick={() => removeProduct(info.row.original.code.toString())}/>
           <AiFillEdit onClick={() => {}}/>
         </Flex>,
         header: () => <span></span>,
@@ -85,9 +83,11 @@ function AllProductsSupplier() {
 
   const removeProduct = async (id: string) => {
     if (id) {
-      console.log(productEndpoints.remove, id);
-      // TO DO
-      //await productEndpoints.remove(id);
+      await productEndpoints.remove(id).then(function (response) {
+        window.location.reload();
+      }).catch((error) => {
+        toast.error("Não foi possível deletar o produto")
+      })
     }
   };
 
@@ -143,6 +143,9 @@ export const Flex = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  svg{
+    cursor: pointer;
+  }
 `;
 
 export const HeaderOrder = styled.div`
