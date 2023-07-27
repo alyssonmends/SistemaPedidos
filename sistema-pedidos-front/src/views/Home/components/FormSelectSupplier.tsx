@@ -1,16 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import styled, { ThemeContext } from "styled-components";
 import { ButtonComponent } from "../../../components/Button/ButtonComponent";
-import { supplierSchema } from "../../../constant/schema";
-import { Form } from "../../../components/Ui/form";
-import useAxios from "../../../hooks/useAxios";
+import { Form } from "../../../components/form";
 import { IOptionsSimpleSelect } from "../../../constant/interface";
-import {  useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { supplierSchema } from "../../../constant/schema";
 import { formatResponseSuppliersForSelect } from "../../../helpers/formatResponse";
-import { suppliersData } from "../../../constant/data";
+import { supplierEndpoints } from "../../../services/endpoints";
 
 interface FormSelectSupplierProps {
   closeModal: Function;
@@ -24,22 +23,17 @@ export function FormSelectSupplier({
 
   const { colors } = useContext(ThemeContext);
   const [option, setOptions] = useState<IOptionsSimpleSelect[]>([]);
-  const { response, error, loaded, loading } = useAxios({
-    method: "get",
-    url: "/Fornecedor",
-    body: {},
-  });
-
+  
   useEffect(() => {
-    // TO DO
-    if (response) {
-      setOptions(formatResponseSuppliersForSelect(response));
-      console.log(formatResponseSuppliersForSelect(response))
-    } else if (error) {
-      const errorMessage = "Não foi possível carregar a lista de produtos";
-      toast.error(errorMessage, { toastId: errorMessage });
-    }
-  }, [response, error]);
+    supplierEndpoints.suppliers()
+      .then(function (response) {
+        setOptions(formatResponseSuppliersForSelect(response.data));
+      })
+      .catch(function (error) {
+        const errorMessage = "Não foi possível carregar a lista de fornecedores";
+        toast.error(errorMessage, { toastId: errorMessage });
+      });
+  }, []);
 
   const createUpdateCollaboratorForm = useForm<any
   >({

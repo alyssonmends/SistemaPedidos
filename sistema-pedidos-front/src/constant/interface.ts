@@ -57,6 +57,7 @@ export interface OrdersTableI{
     date: string;
     action: any;
     produtoId: string;
+    product: string;
   }
 
 export interface SuppliersTableI{

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import SystemName from "../../../components/Logo/SystemName";
+import SystemName from "../Logo/SystemName";
 import ActionHeader from "./ActionHeader";
 
 type HeaderProps = {

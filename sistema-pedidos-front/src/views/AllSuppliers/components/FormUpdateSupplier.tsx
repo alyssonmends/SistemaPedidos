@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled, { ThemeContext } from "styled-components";
 import { ButtonComponent } from "../../../components/Button/ButtonComponent";
@@ -8,13 +8,15 @@ import { Form } from "../../../components/form";
 import { supplierEndpoints } from "../../../services/endpoints";
 import { toast } from "react-toastify";
 
-interface FormSupplierProps {
+interface FormUpdateSupplierProps {
   closeModal: Function;
+  supplier: any;
 }
 
-export function FormSupplier({
+export function FormUpdateSupplier({
   closeModal,
-}: FormSupplierProps) {
+  supplier
+}: FormUpdateSupplierProps) {
 
   const { colors } = useContext(ThemeContext);
   const createUpdateCollaboratorForm = useForm<any
@@ -22,24 +24,30 @@ export function FormSupplier({
     resolver: zodResolver(
       createUpdateSupplierSchema
     ),
+    defaultValues: {
+      nome: supplier?.nome,
+      razaoSocial: supplier?.razaoSocial,
+      uf: supplier?.uf,
+      cnpj: supplier?.cnpj,
+      email: supplier?.email,
+    },
   });
 
   const done = async (
     data: any
   ) => {
     await supplierEndpoints
-      .create(data)
+      .update(supplier?.id ,data)
       .then(({ data }) => {
         window.location.reload();
       })
       .catch((error) =>
-        toast.error("Não foi possível criar fornecedor!", {
+        toast.error("Não foi possível atualizar as informações do fornecedor!", {
           toastId: `${error?.message}`,
         })
       );
     closeModal();
   };
-
 
   const {
     handleSubmit,

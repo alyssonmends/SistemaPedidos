@@ -3,20 +3,20 @@ import { useContext } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled, { ThemeContext } from "styled-components";
 import { ButtonComponent } from "../../../components/Button/ButtonComponent";
-import { Form } from "../../../components/Ui/form";
+import { Form } from "../../../components/form";
 import { createUpdateProductSchema } from "../../../constant/schema";
 import { productEndpoints } from "../../../services/endpoints";
 import { toast } from "react-toastify";
 
-interface FormProductProps {
+interface FormUpdateProductSupplierProps {
   closeModal: Function;
-  supplierId: any;
+  product: any;
 }
 
-export function FormProduct({
+export function FormUpdateProductSupplier({
   closeModal,
-  supplierId
-}: FormProductProps) {
+  product
+}: FormUpdateProductSupplierProps) {
 
   const { colors } = useContext(ThemeContext);
 
@@ -25,22 +25,22 @@ export function FormProduct({
     resolver: zodResolver(
       createUpdateProductSchema
     ),
+    defaultValues: {
+      descricao: product?.descricao,
+      valor: product?.valor
+    },
   });
 
   const done = async (
     data: any
   ) => {
-    const body = {
-      ...data, 
-      "fornecedorId": supplierId,
-    }
     await productEndpoints
-      .create(body)
+      .update(product?.codigo, data)
       .then(({ data }) => {
         window.location.reload();
       })
       .catch((error) =>
-        toast.error("Não foi possível criar produto!", {
+        toast.error("Não foi possível atualizar as informações do product!", {
           toastId: `${error?.message}`,
         })
       );

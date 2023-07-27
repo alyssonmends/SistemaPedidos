@@ -1,25 +1,22 @@
-import styled from "styled-components";
-import SectionTitle from "../../components/Ui/SectionTitle";
-import Footer from "../../layout/components/Footer/Footer";
-import Header from "../../layout/components/Header/Header";
-import { useEffect, useState } from "react";
-import { OrdersI, OrdersTableI } from "../../constant/interface";
-import { DefaultTable } from "../../components/Table/Table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { formatResponseOrders } from "../../helpers/formatResponse";
+import { useEffect, useState } from "react";
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
-import { ordersData } from "../../constant/data";
-import useAxios from "../../hooks/useAxios";
-import { orderEndpoints } from "../../services/endpoints";
-import { api } from "../../services/api";
 import { toast } from "react-toastify";
+import styled from "styled-components";
+import { DefaultTable } from "../../components/Table/Table";
+import SectionTitle from "../../components/SectionTitle";
+import { OrdersI, OrdersTableI } from "../../constant/interface";
+import { formatResponseOrders } from "../../helpers/formatResponse";
+import Footer from "../../components/Footer/Footer";
+import Header from "../../components/Header/Header";
+import { orderEndpoints } from "../../services/endpoints";
 
 function AllOrders() {
   const [orders, setOrders] = useState<OrdersI[]>([]);
   const [columns, setColumns] = useState<ColumnDef<OrdersTableI, any>[]>();
 
   useEffect(() => {
-      api.get(`/Pedido`)
+      orderEndpoints.orders()
         .then(function (response) {
            setOrders(
             formatResponseOrders(response.data)
@@ -43,12 +40,16 @@ function AllOrders() {
         header: () => <span>{"Nome do fornecedor"}</span>,
       }),
       columnHelper.accessor("value", {
-        cell: (info) => info.getValue(),
+        cell: (info) => <span>R$ {info.getValue()}</span>,
         header: () => <span>{"Valor Total"}</span>,
       }),
       columnHelper.accessor("quantity", {
         cell: (info) => info.getValue(),
         header: () => <span>{"Quantidade"}</span>,
+      }),
+      columnHelper.accessor("product", {
+        cell: (info) => info.getValue(),
+        header: () => <span>{"Produto"}</span>,
       }),
       columnHelper.accessor("date", {
         cell: (info) => info.getValue(),
@@ -57,7 +58,6 @@ function AllOrders() {
       columnHelper.accessor("action", {
         cell: (info) => <Flex>
           <AiFillDelete onClick={() => removeOrder(info.row.original.code.toString())}/>
-          <AiFillEdit onClick={() => {}}/>
         </Flex>,
         header: () => <span>{}</span>,
       }),

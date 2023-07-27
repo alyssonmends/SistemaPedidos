@@ -3,37 +3,44 @@ import { useContext } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled, { ThemeContext } from "styled-components";
 import { ButtonComponent } from "../../../components/Button/ButtonComponent";
-import { createUpdateSupplierSchema } from "../../../constant/schema";
 import { Form } from "../../../components/form";
-import { supplierEndpoints } from "../../../services/endpoints";
+import { createUpdateProductSchema } from "../../../constant/schema";
+import { productEndpoints } from "../../../services/endpoints";
 import { toast } from "react-toastify";
 
-interface FormSupplierProps {
+interface FormProductSupplierProps {
   closeModal: Function;
+  supplierId: any;
 }
 
-export function FormSupplier({
+export function FormProductSupplier({
   closeModal,
-}: FormSupplierProps) {
+  supplierId
+}: FormProductSupplierProps) {
 
   const { colors } = useContext(ThemeContext);
+
   const createUpdateCollaboratorForm = useForm<any
   >({
     resolver: zodResolver(
-      createUpdateSupplierSchema
+      createUpdateProductSchema
     ),
   });
 
   const done = async (
     data: any
   ) => {
-    await supplierEndpoints
-      .create(data)
+    const body = {
+      ...data, 
+      "fornecedorId": supplierId,
+    }
+    await productEndpoints
+      .create(body)
       .then(({ data }) => {
         window.location.reload();
       })
       .catch((error) =>
-        toast.error("Não foi possível criar fornecedor!", {
+        toast.error("Não foi possível criar produto!", {
           toastId: `${error?.message}`,
         })
       );
@@ -51,35 +58,17 @@ export function FormSupplier({
       <FormProvider {...createUpdateCollaboratorForm}>
         <form autoComplete="off" onSubmit={handleSubmit(done)}>
           <ContentForm>
-            <SFormLabel htmlFor="newPassword">{"Nome"}</SFormLabel>
+            <SFormLabel htmlFor="descricao">{"Descrição"}</SFormLabel>
             <Form.Input
               type="text"
-              name="nome"
-              placeholder="Digite o nome"
+              name="descricao"
+              placeholder="Digite a descrição"
             />
-             <SFormLabel htmlFor="cnpj">{"Razão social"}</SFormLabel>
+             <SFormLabel htmlFor="valor">{"Valor"}</SFormLabel>
             <Form.Input
               type="text"
-              name="razaoSocial"
-              placeholder="Digite a razão social"
-            />
-             <SFormLabel htmlFor="newPassword">{"UF"}</SFormLabel>
-            <Form.Input
-              type="text"
-              name="uf"
-              placeholder="Digite a UF"
-            />
-             <SFormLabel htmlFor="newPassword">{"CNPJ"}</SFormLabel>
-            <Form.Input
-              type="text"
-              name="cnpj"
-              placeholder="Digite o CNPJ"
-            />
-            <SFormLabel htmlFor="newPassword">{"E-mail"}</SFormLabel>
-            <Form.Input
-              type="text"
-              name="email"
-              placeholder="Digite o e-mail"
+              name="valor"
+              placeholder="Digite o valor"
             />
           </ContentForm>
           <ActionsButton>

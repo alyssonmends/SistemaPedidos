@@ -1,19 +1,17 @@
-import styled from "styled-components";
-import SectionTitle from "../../components/Ui/SectionTitle";
-import Footer from "../../layout/components/Footer/Footer";
-import Header from "../../layout/components/Header/Header";
-import { useEffect, useState } from "react";
-import { OrdersI, OrdersTableI } from "../../constant/interface";
-import { DefaultTable } from "../../components/Table/Table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { formatResponseOrders } from "../../helpers/formatResponse";
-import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
-import { ordersData } from "../../constant/data";
-import { orderEndpoints } from "../../services/endpoints";
-import useAxios from "../../hooks/useAxios";
-import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { AiFillDelete } from 'react-icons/ai';
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import styled from "styled-components";
+import { DefaultTable } from "../../components/Table/Table";
+import SectionTitle from "../../components/SectionTitle";
+import { OrdersI, OrdersTableI } from "../../constant/interface";
+import { formatResponseOrders } from "../../helpers/formatResponse";
+import Footer from "../../components/Footer/Footer";
+import Header from "../../components/Header/Header";
 import { api } from "../../services/api";
+import { orderEndpoints } from "../../services/endpoints";
 
 function AllOrdersSupplier() {
   const [orders, setOrders] = useState<OrdersI[]>([]);
@@ -36,7 +34,7 @@ function AllOrdersSupplier() {
 
     useEffect(() => {
     if(supplierId != ""){
-      api.get(`/Pedido/fornecedor/${supplierId}`)
+      orderEndpoints.ordersBySupplier(supplierId)
         .then(function (response) {
            setOrders(
             formatResponseOrders(response.data)
@@ -61,12 +59,16 @@ function AllOrdersSupplier() {
         header: () => <span>{"Nome do fornecedor"}</span>,
       }),
       columnHelper.accessor("value", {
-        cell: (info) => info.getValue(),
+        cell: (info) => <span>R$ {info.getValue()}</span>,
         header: () => <span>{"Valor Total"}</span>,
       }),
       columnHelper.accessor("quantity", {
         cell: (info) => info.getValue(),
         header: () => <span>{"Quantidade"}</span>,
+      }),
+      columnHelper.accessor("product", {
+        cell: (info) => info.getValue(),
+        header: () => <span>{"Produto"}</span>,
       }),
       columnHelper.accessor("date", {
         cell: (info) => info.getValue(),
@@ -74,8 +76,7 @@ function AllOrdersSupplier() {
       }),
       columnHelper.accessor("action", {
         cell: (info) => <Flex>
-          <AiFillDelete onClick={() => removeOrder(info.row.original.produtoId)}/>
-          {/* <AiFillEdit onClick={() => {}}/> */}
+          <AiFillDelete onClick={() => removeOrder(info.row.original.code.toString())}/>
         </Flex>,
         header: () => <span>{}</span>,
       }),
@@ -84,9 +85,11 @@ function AllOrdersSupplier() {
 
   const removeOrder = async (id: string) => {
     if (id) {
-      console.log(orderEndpoints.remove, id);
-      // TO DO
-      //await productEndpoints.remove(id);
+      await orderEndpoints.remove(id).then(function (response) {
+        window.location.reload();
+      }).catch((error) => {
+        toast.error("Não foi possível deletar o pedido")
+      })
     }
   };
 
@@ -115,6 +118,9 @@ export const Flex = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  svg{
+    cursor: pointer;
+  }
 `;
 
 export const HeaderOrder = styled.div`

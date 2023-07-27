@@ -2,7 +2,7 @@ import { Controller } from "react-hook-form";
 import Select, { StylesConfig } from "react-select";
 import { useContext } from "react";
 import { ThemeContext } from "styled-components";
-import { IOptionsSimpleSelect } from "../../../constant/interface";
+import { IOptionsSimpleSelect } from "../../constant/interface";
 
 interface SimpleSelectForFormProps {
   name: string;

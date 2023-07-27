@@ -12,7 +12,8 @@ export const formatResponseOrders = (data: OrdersI[]) => {
             value: `${order.valorTotal}`,
             quantity: order.quantidadeProdutos,
             date: formatDate(order.dataPedido),
-            produtoId: order.produtoId
+            produtoId: order.produtoId,
+            product: order?.produto?.descricao
           } as OrdersTableI;
           ordersForTable.push(d)
         }

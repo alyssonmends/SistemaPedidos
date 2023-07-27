@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import SectionTitle from "../../components/Ui/SectionTitle";
-import Footer from "../../layout/components/Footer/Footer";
-import Header from "../../layout/components/Header/Header";
+import SectionTitle from "../../components/SectionTitle";
+import Footer from "../../components/Footer/Footer";
+import Header from "../../components/Header/Header";
 import { ProductI } from "../../constant/interface";
 import Card from "./components/Card/Card";
 import styled from "styled-components";
@@ -9,7 +9,7 @@ import { formatResponseProducts } from "../../helpers/formatResponse";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { api } from "../../services/api";
-import { orderEndpoints } from "../../services/endpoints";
+import { orderEndpoints, productEndpoints } from "../../services/endpoints";
 
 function AllProducts() {
   const [supplierName, setSupplierName] = useState<string>("");
@@ -38,7 +38,7 @@ function AllProducts() {
  
   useEffect(() => {
     if(supplierId != ""){
-      api.get(`/Produto/fornecedor/${supplierId}`)
+      productEndpoints.productsBySupplie(supplierId)
         .then(function (response) {
           setProducts(formatResponseProducts(response.data));
         }).catch(function (error) {

@@ -9,7 +9,7 @@ import { GlobalStyles } from "./styles/global";
 import { ThemeProvider } from "styled-components";
 import defaultTheme from "../src/styles/themes/default";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { CustomToastContainer } from "./components/Ui/CustomToastContainer";
+import { CustomToastContainer } from "./components/CustomToastContainer";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

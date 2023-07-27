@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Banner from "../../components/Banner/SystemBanner";
 import SystemMenu from "../../components/Menu/SystemMenu";
-import Footer from "../../layout/components/Footer/Footer";
+import Footer from "../../components/Footer/Footer";
 
 function Home() {
     return (

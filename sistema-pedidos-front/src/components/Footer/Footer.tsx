@@ -1,5 +1,4 @@
-import SystemName from "../../../components/Logo/SystemName";
-
+import SystemName from "../Logo/SystemName";
 
 function Footer() {
 

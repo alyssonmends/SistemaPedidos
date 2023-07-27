@@ -1,42 +1,39 @@
-import styled from "styled-components";
-import SectionTitle from "../../components/Ui/SectionTitle";
-import Footer from "../../layout/components/Footer/Footer";
-import Header from "../../layout/components/Header/Header";
-import { useEffect, useState } from "react";
-import { OrdersTableI, SupplierI, SuppliersTableI } from "../../constant/interface";
-import { DefaultTable } from "../../components/Table/Table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
+import { useEffect, useState } from "react";
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
-import { suppliersData } from "../../constant/data";
-import useAxios from "../../hooks/useAxios";
-import { orderEndpoints, supplierEndpoints } from "../../services/endpoints";
-import { formatResponseSuppliers } from "../../helpers/formatResponse";
 import { useNavigate } from "react-router-dom";
-import { CustomModal } from "../../components/Modal/CustomModal";
-import { FormSupplier } from "./components/FormSupplier";
 import { toast } from "react-toastify";
+import styled from "styled-components";
+import { CustomModal } from "../../components/Modal/CustomModal";
+import { DefaultTable } from "../../components/Table/Table";
+import SectionTitle from "../../components/SectionTitle";
+import { SupplierI, SuppliersTableI } from "../../constant/interface";
+import { formatResponseSuppliers } from "../../helpers/formatResponse";
+import Footer from "../../components/Footer/Footer";
+import Header from "../../components/Header/Header";
+import { supplierEndpoints } from "../../services/endpoints";
+import { FormSupplier } from "./components/FormSupplier";
+import { FormUpdateSupplier } from "./components/FormUpdateSupplier";
 
 function AllSuppliers() {
 
   const [showModal, setShowModal] = useState(false);
-  const [suppliers, setSupplier] = useState<SupplierI[]>([]);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [suppliers, setSuppliers] = useState<SupplierI[]>([]);
   const [columns, setColumns] = useState<ColumnDef<SuppliersTableI, any>[]>();
-  const { response, error, loaded, loading } = useAxios({
-    method: "get",
-    url: "/Fornecedor",
-    body: {},
-  });
-
+  const [supplier, setSupplier] = useState<SupplierI>();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (response) {
-      setSupplier(formatResponseSuppliers(response));
-    } else if (error) {
-      const errorMessage = "Não foi possível carregar a lista de produtos";
-      toast.error(errorMessage, { toastId: errorMessage });
-    }
-  }, [response, error]);
+      supplierEndpoints.suppliers()
+        .then(function (response) {
+          setSuppliers(formatResponseSuppliers(response.data));
+        })
+        .catch(function (error) {
+          const errorMessage = "Não foi possível carregar a lista de fornecedores";
+          toast.error(errorMessage, { toastId: errorMessage });
+        });
+  }, []);
 
   const columnHelper = createColumnHelper<SuppliersTableI>();
 
@@ -73,7 +70,7 @@ function AllSuppliers() {
               localStorage.setItem("supplier", JSON.stringify({"supplier":{"value":info.row.original.id,"label":info.row.original.businessName}}));
           }}>Pedidos</ButtonS>
           <AiFillDelete onClick={() => removeSupplier(info.row.original.id.toString())}/>
-          <AiFillEdit onClick={() => removeSupplier(info.row.original.id.toString())}/>
+          <AiFillEdit onClick={() => updateSupplier(info.row.original.id.toString())}/>
         </Flex>,
         header: () => <span>{}</span>,
       }),
@@ -87,6 +84,19 @@ function AllSuppliers() {
       }).catch((error) => {
         toast.error("Não foi possível deletar o fornecedor")
       })
+    }
+  };
+
+  const updateSupplier = async (id: string) => {
+    if (id) {
+      supplierEndpoints.supplier(id)
+      .then(function (response) {
+        setSupplier(response.data)
+        setShowUpdateModal(true)
+      }).catch(function (error) {
+        const errorMessage = "Não foi possível carregar as informações do fornecedor.";
+        toast.error(errorMessage, { toastId: errorMessage });
+      });
     }
   };
 
@@ -104,11 +114,23 @@ function AllSuppliers() {
       {showModal && (
         <CustomModal
             show={showModal}
-            title={"Fornecedor"}
+            title={"Criar Fornecedor"}
             onClose={() => setShowModal(false)}
             >
             <FormSupplier
                 closeModal={() => setShowModal(false)}
+            />
+        </CustomModal>
+      )}
+      {showUpdateModal && (
+        <CustomModal
+            show={showUpdateModal}
+            title={"Atualizar fornecedor"}
+            onClose={() => setShowUpdateModal(false)}
+            >
+            <FormUpdateSupplier
+                closeModal={() => setShowUpdateModal(false)}
+                supplier={supplier}
             />
         </CustomModal>
       )}
