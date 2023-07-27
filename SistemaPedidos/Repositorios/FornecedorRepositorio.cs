@@ -4,6 +4,7 @@ using SistemaPedidos.Models;
 using SistemaPedidos.Repositorios.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SistemaPedidos.Repositorios
@@ -60,9 +61,21 @@ namespace SistemaPedidos.Repositorios
         {
             FornecedorModel fornecedorPorId = await BuscarPorId(id);
 
+            ProdutoModel produtoModel = await _dbContext.Produtos.FirstOrDefaultAsync(x => x.FornecedorId == id);
+
+            PedidoModel pedidoModel = await _dbContext.Pedidos.FirstOrDefaultAsync(x => x.Produto.FornecedorId == id);
+
             if (fornecedorPorId == null)
             {
-                throw new Exception("Fornecedor" + id + "não foi encontrado.");
+                throw new Exception("Fornecedor " + id + " não foi encontrado.");
+            } 
+            else if (pedidoModel != null)
+            {
+                throw new Exception("Fornecedor " + id + " tem cadastro em pedido.");
+            }
+            else if (produtoModel != null)
+            {
+                throw new Exception("Fornecedor " + id + " tem cadastro em produto.");
             }
 
             _dbContext.Fornecedores.Remove(fornecedorPorId);
