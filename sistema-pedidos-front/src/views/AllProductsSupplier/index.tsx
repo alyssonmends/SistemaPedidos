@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { ProductI, ProductsTableI } from "../../constant/interface";
 import { DefaultTable } from "../../components/Table/Table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { formatResponseProducts } from "../../helpers/formatResponse";
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import { productsData } from "../../constant/data";
 import useAxios from "../../hooks/useAxios";
@@ -15,6 +14,7 @@ import { CustomModal } from "../../components/Modal/CustomModal";
 import { FormProduct } from "./components/FormSupplier";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { formatResponseProducts } from "../../helpers/formatResponse";
 
 function AllProductsSupplier() {
   const [products, setProducts] = useState<ProductI[]>([]);
@@ -45,9 +45,7 @@ function AllProductsSupplier() {
   useEffect(() => {
     // TO DO
     // if (response) {
-      setProducts(
-        formatResponseProducts(productsData)
-      );
+      setProducts(formatResponseProducts(productsData));
     // } else if (error) {
     //   const errorMessage = "Não foi possível carregar a lista de produtos";
     //   toast.error(errorMessage, { toastId: errorMessage });

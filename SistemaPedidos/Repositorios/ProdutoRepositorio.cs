@@ -5,6 +5,7 @@ using SistemaPedidos.Repositorios.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace SistemaPedidos.Repositorios
 {
@@ -22,6 +23,16 @@ namespace SistemaPedidos.Repositorios
             return await _dbContext.Produtos
                 .Include(x => x.Fornecedor)
                 .ToListAsync();
+        }
+
+        public async Task<List<ProdutoModel>> BuscarProdutosPorFornecedor(int id)
+        {
+            var produtos = await _dbContext.Produtos
+             .Include(x => x.Fornecedor)
+             .ToListAsync();
+            var produtosPorFornecedor = produtos.Where(y => y.FornecedorId == id)
+             .ToList();
+            return produtosPorFornecedor;
         }
 
         public async Task<ProdutoModel> BuscarPorId(int id)

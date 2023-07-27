@@ -8,6 +8,7 @@ import { Form } from "../../../components/Ui/form";
 import useAxios from "../../../hooks/useAxios";
 import { IOptionsSimpleSelect } from "../../../constant/interface";
 import {  useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface FormSelectSupplierProps {
   closeModal: Function;
@@ -29,7 +30,8 @@ export function FormSelectSupplier({
 
   useEffect(() => {
     // TO DO
-    // if (response) {
+    if (response) {
+      console.log("response", response)
       setOptions(
         [{
           label: "Master LTDA", value: "1"
@@ -37,10 +39,10 @@ export function FormSelectSupplier({
           label: "Alpha", value: "2"
         }]
       );
-    // } else if (error) {
-    //   const errorMessage = "Não foi possível carregar a lista de produtos";
-    //   toast.error(errorMessage, { toastId: errorMessage });
-    // }
+    } else if (error) {
+      const errorMessage = "Não foi possível carregar a lista de produtos";
+      toast.error(errorMessage, { toastId: errorMessage });
+    }
   }, [response, error]);
 
   const createUpdateCollaboratorForm = useForm<any

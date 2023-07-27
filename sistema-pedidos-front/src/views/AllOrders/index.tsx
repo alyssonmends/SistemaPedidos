@@ -77,7 +77,7 @@ function AllOrders() {
 
   return (
     <>
-      <Header supplierName={""} actionText={"Voltar"} actionUrl={"/"} />
+      <Header actionText={"Voltar"} actionUrl={"/"} />
       <Content>
         <SectionTitle title={"Todos pedidos realizados por todas as lojas"} />
         <DefaultTable data={orders} columns={columns || []} />

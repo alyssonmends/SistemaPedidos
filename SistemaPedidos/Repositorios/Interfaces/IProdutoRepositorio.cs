@@ -8,6 +8,8 @@ namespace SistemaPedidos.Repositorios.Interfaces
     {
         Task<List<ProdutoModel>> BuscarProdutos();
 
+        Task<List<ProdutoModel>> BuscarProdutosPorFornecedor(int id);
+
         Task<ProdutoModel> BuscarPorId(int id);
 
         Task<ProdutoModel> AdicionarProduto(ProdutoModel fornecedor);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using SistemaPedidos.Models;
 using SistemaPedidos.Repositorios.Interfaces;
@@ -8,6 +9,7 @@ namespace SistemaPedidos.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("ReactPolicy")]
     public class ProdutoController : ControllerBase
     {
         private readonly IProdutoRepositorio _produtoRepositorio;
@@ -22,6 +24,13 @@ namespace SistemaPedidos.Controllers
         {
             List<ProdutoModel> produtos = await _produtoRepositorio.BuscarProdutos();
             return Ok(produtos);
+        }
+
+        [HttpGet("fornecedor/{id}")]
+        public async Task<ActionResult<List<ProdutoModel>>> BuscarProdutosPorFornecedor(int id)
+        {
+            List<ProdutoModel> produtosPorFornecedor = await _produtoRepositorio.BuscarProdutosPorFornecedor(id);
+            return Ok(produtosPorFornecedor);
         }
 
         [HttpGet("{id}")]
