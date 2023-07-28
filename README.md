@@ -11,6 +11,7 @@
 ## 💻 Sobre o projeto
 
 Projeto desenvolvido para o processo seletivo Fortes Tecnologia na etapa de avaliação técnica.
+Link com o vídeo do projeto: https://drive.google.com/drive/folders/1G3c057pqz6qRdTCpebi2omHISHXz9tz_?usp=sharing
 
 ---
 
@@ -26,8 +27,8 @@ Projeto desenvolvido para o processo seletivo Fortes Tecnologia na etapa de aval
 ## 🚀 Como executar o projeto
 
 Este projeto é divido em duas partes:
-1. Backend (pasta backend) 
-2. Frontend (pasta frontend)
+1. Backend (pasta SistemaPedidos) 
+2. Frontend (pasta sistema-pedidos-front)
 
 💡O Frontend necessita que o Backend esteja sendo executado para funcionar.
 
