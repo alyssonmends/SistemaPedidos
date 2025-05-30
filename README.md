@@ -5,7 +5,7 @@
 </h1>
 
 <h3 align="center">
-    Projeto Web na plataforma .NET usando a linguagem C#, que deverá atender aos requisitos de um sistema de pedidos.
+    Projeto Web na plataforma .NET usando TypeScript/React, que deverá atender aos requisitos de um sistema de pedidos.
 </h3>
 
 ## 💻 Visualização do projeto
