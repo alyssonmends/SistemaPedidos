@@ -8,9 +8,8 @@
     Projeto Web na plataforma .NET usando a linguagem C#, que deverá atender aos requisitos de um sistema de pedidos.
 </h3>
 
-## 💻 Sobre o projeto
+## 💻 Visualização do projeto
 
-Projeto desenvolvido para o processo seletivo Fortes Tecnologia na etapa de avaliação técnica.
 Link com o vídeo do projeto: https://drive.google.com/drive/folders/1G3c057pqz6qRdTCpebi2omHISHXz9tz_?usp=sharing
 
 ---
